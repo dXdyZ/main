@@ -1,19 +1,19 @@
 $(function(){
 
     const appendBook = function(data){
-        var bookCode = '<a href="#" class="book-link" data-id="' +
-            data.id + '">' + data.name + '</a><br>';
+        var bookCode = '<h4>' + data.name + '</h4>' +
+            'Год выпуска: ' + data.year;
         $('#book-list')
             .append('<div>' + bookCode + '</div>');
     };
 
     //Loading books on load page
-//    $.get('/books/', function(response)
-//    {
-//        for(i in response) {
-//            appendBook(response[i]);
-//        }
-//    });
+    $.get('/books/', function(response)
+    {
+        for(i in response) {
+            appendBook(response[i]);
+        }
+    });
 
     //Show adding book form
     $('#show-add-book-form').click(function(){
