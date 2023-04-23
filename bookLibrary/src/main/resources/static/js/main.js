@@ -1,10 +1,11 @@
 $(function(){
 
     const appendBook = function(data){
-        var bookCode = '<h4>' + data.name + '</h4>';
-        $('#book-list')
-            .append('<div>' + bookCode + '</div>');
-    };
+            var bookCode = '<a href="#" class="book-link" data-id="' +
+                data.id + '">' + data.name + '</a><br>';
+            $('#book-list')
+                .append('<div>' + bookCode + '</div>');
+        };
 
     //Loading books on load page
     $.get('/books/', function(response)
