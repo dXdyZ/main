@@ -1,8 +1,7 @@
 $(function(){
 
     const appendBook = function(data){
-        var bookCode = '<h4>' + data.name + '</h4>' +
-            'Год выпуска: ' + data.year;
+        var bookCode = '<h4>' + data.name + '</h4>';
         $('#book-list')
             .append('<div>' + bookCode + '</div>');
     };
