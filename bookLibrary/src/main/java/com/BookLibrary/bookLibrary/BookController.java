@@ -1,5 +1,7 @@
 package com.BookLibrary.bookLibrary;
 
+import com.BookLibrary.bookLibrary.model.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,9 @@ import java.util.List;
 
 @RestController
 public class BookController {
+
+    @Autowired
+    private BookRepository bookRepository;
     @GetMapping("/books/")
     public List<Book> list(){
         return Storage.getAllBooks();
@@ -16,7 +21,8 @@ public class BookController {
 
     @PostMapping("/books/")
     public int add(Book book){
-        return Storage.addBook(book);
+        Book newBook = bookRepository.save(book);
+        return newBook.getId();
     }
 
 
