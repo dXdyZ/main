@@ -18,7 +18,7 @@ public class BookController {
     private BookRepository bookRepository;
     @GetMapping("/books/")
     public List<Book> list(){
-        Iterable<Book> bookIterable= bookRepository.findAll();
+        Iterable<Book> bookIterable = bookRepository.findAll();
         ArrayList<Book> books = new ArrayList<>();
         for (Book book : bookIterable){
             books.add(book);
