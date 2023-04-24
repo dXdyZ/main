@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.BookLibrary.bookLibrary.model.Book;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BookController {
@@ -16,7 +18,12 @@ public class BookController {
     private BookRepository bookRepository;
     @GetMapping("/books/")
     public List<Book> list(){
-        return Storage.getAllBooks();
+        Iterable<Book> bookIterable= bookRepository.findAll();
+        ArrayList<Book> books = new ArrayList<>();
+        for (Book book : bookIterable){
+            books.add(book);
+        }
+        return books;
     }
 
     @PostMapping("/books/")
@@ -28,10 +35,10 @@ public class BookController {
 
     @GetMapping("/books/{id}")
     public ResponseEntity get(@PathVariable int id){
-        Book book = Storage.getBook(id);
-        if(book == null){
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if(optionalBook.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return  new ResponseEntity(book, HttpStatus.OK);
+        return  new ResponseEntity(optionalBook.get(), HttpStatus.OK);
     }
 }
