@@ -62,3 +62,8 @@ final{
 не можем созать set
 их надо делать static
 }
+StringBuilder{
+StringBuilder sb = new StringBuilder("Hello");
+        sb.append(" Good").append(" my").append("gggg").append("123");
+        System.out.println(sb.toString());
+}
