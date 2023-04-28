@@ -167,3 +167,22 @@ AnimalToEat animalToEat = new AnimalToEat() {
  }
 }
 Интерфейс - говорим что должно быть реализованно но не говорим как оно дожно быть реализованно
+Работа с файлами через сканер{
+ String path = "test.txt";
+File file = new File(path);
+Scanner scanner = new Scanner(file);
+
+String line = scanner.nextLine();
+String[] numbers = line.split(" ");
+for (String number : numbers){
+    Integer.parseInt(number); // парсим строку в чило
+}
+System.out.println(Arrays.toString(numbers));
+
+scanner.close();
+}
+Исключения{
+FileNotFoundException - исключение вызывается если файла не существует
+throws - можно обьявить сразу при создании метода и он будет говорить о том что при выполнении
+метода может возникнуть исключение
+}
