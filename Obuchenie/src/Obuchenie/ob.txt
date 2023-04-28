@@ -86,3 +86,84 @@ long l = 12390L;
 Конвертация из long в int
 int x = (int) l;
 }
+Восходящее и нисходящее преобразование{
+Восходящее преобразование
+Animal animak = new Dog();
+нисходящее преобразование
+Dog dog2 = (Dog) animal;
+}
+Wildcards (Generics){
+public String toString(){
+        return String.valueOf(id); целое число id конвертируется в строку
+    }
+public static void test(List<? extends Animal> list) - знак вопроса говорит о том что можно пераедать лист любых обьектов -
+extends говорит что мы можем поставить туда матоды либо Animal либо те которые наследуют класс энимал
+super - говорит о том что мы хотим видет все классы выше Animal
+List<Animal> listOfAnimal = new ArrayList<>();
+        listOfAnimal.add(new Animal(1));
+        listOfAnimal.add(new Animal(2));
+
+        List<Dog> fDogs = new ArrayList<>();
+        fDogs.add(new Dog());
+        fDogs.add(new Dog());
+
+
+        test(listOfAnimal);
+        test(fDogs);
+    }
+    public static void test(List<? extends Animal> list){
+        for (Animal animal : list){
+            animal.eat();
+        }
+    }
+}
+class Animal{
+    private int id;
+    public Animal(){}
+
+    public Animal(int id){
+        this.id = id;
+    }
+    public void eat(){
+        System.out.println("i am eatig");
+    }
+    public String toString(){
+        return String.valueOf(id);
+    }
+}
+
+class Dog extends Animal{}
+}
+анонимные классы{
+         Animal animal = new Animal();
+         animal.eat();
+         // переопределяем метод eat из класса Animal
+         Animal animal1 = new Animal(){ // создается не обьект класса Animal а его наследник
+             public void eat(){
+                 System.out.println("Other animal");
+             }
+         };
+         animal1.eat();
+     }
+ }
+ class Animal{
+     public void eat(){
+         System.out.println("Animal is eating...");
+     }
+ }
+
+Если нужно содать класс на одно использование то реализуем с помощью интерейса
+создать объект этого класса можно только один раз
+AnimalToEat animalToEat = new AnimalToEat() {
+            @Override
+            public void eat() {
+                System.out.println("is eating");
+            }
+        };
+     }
+ }
+ interface AnimalToEat {
+     public void eat();
+ }
+}
+Интерфейс - говорим что должно быть реализованно но не говорим как оно дожно быть реализованно
