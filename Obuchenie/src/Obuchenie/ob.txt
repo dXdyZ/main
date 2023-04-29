@@ -375,8 +375,10 @@ PrintWriter ow = new PrintWriter(file);
 ow.println("Test or 1"); - записываем первую строку
 ow.println("Test or 2"); - записываем вторую строку
 ow.close();
+}
 
-Запись обьектов
+Запись обьектов{
+Сериализация объектов
 import java.io.*;
 
 public class Main {
@@ -442,4 +444,8 @@ class ReadObject{
         }
     }
 }
+}
+
+Сериализация массивов{
+
 }
