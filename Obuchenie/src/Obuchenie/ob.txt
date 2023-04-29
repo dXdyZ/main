@@ -382,8 +382,8 @@ import java.io.*;
 public class Main {
     // Запись в файл
     public static void main(String[] args){
-        Person person1 = new Person(1, "Tom");
-        Person person2 = new Person(2, "Maks");
+        Person person1 = new Person(1, "Tom");   // создаем объект для записи
+        Person person2 = new Person(2, "Maks");  // создаем объект для записи
 
         try {
             FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"); - переводим данные в байты
