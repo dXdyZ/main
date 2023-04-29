@@ -367,6 +367,79 @@ class Electrocar{
 }
 
 
-Запись в файл.{
+Запись в файл{
+Запись строковых данных
+PrintWriter - предназначен только для записи строк
+File file = new File("tets");
+PrintWriter ow = new PrintWriter(file);
+ow.println("Test or 1"); - записываем первую строку
+ow.println("Test or 2"); - записываем вторую строку
+ow.close();
 
+Запись обьектов
+import java.io.*;
+
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person person1 = new Person(1, "Tom");
+        Person person2 = new Person(2, "Maks");
+
+        try {
+            FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"); - переводим данные в байты
+            ObjectOutputStream oos = new ObjectOutputStream(fos); - работает с этим дынными
+
+            oos.writeObject(person1);  - записываем объект1 в файл
+            oos.writeObject(person2);  - записываем объект2 в файл
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Person implements Serializable{
+    private int id;
+    private String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toString(){
+        return id + "," + name;
+    }
+}
+
+// Чтение из файла
+class ReadObject{
+    public static void main(String[] args) {
+        try {
+            FileInputStream fip = new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectInputStream oos = new ObjectInputStream(fip);
+
+            Person person1 = (Person) oos.readObject(); - создаем объект и даункасим его, так же передаем ему данные из файл
+            Person person2 = (Person) oos.readObject(); - создаем объект и даункасим его, так же передаем ему данные из файл
+
+            System.out.println(person1);
+            System.out.println(person2);
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
 }
