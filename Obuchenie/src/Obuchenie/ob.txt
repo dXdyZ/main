@@ -378,6 +378,7 @@ ow.close();
 }
 
 Запись обьектов{
+Первый способ
 Сериализация объектов
 import java.io.*;
 
@@ -447,5 +448,235 @@ class ReadObject{
 }
 
 Сериализация массивов{
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person[] people = {new Person (1, "Tom"),
+                new Person(2, "Maks")};
 
+        try {
+            FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeInt(people.length); // длинна массива
+            for (Person person: people){
+                oos.writeObject(person); // записываем в масив
+            }
+
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Person implements Serializable{
+    private int id;
+    private String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toString(){
+        return id + "," + name;
+    }
+}
+
+// Чтение из файла
+class ReadObject{
+    public static void main(String[] args) {
+        try {
+            FileInputStream fip = new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectInputStream oos = new ObjectInputStream(fip);
+
+            int perconCount = oos.readInt(); // считываем число
+
+            Person[] people = new Person[perconCount];
+            for (int i = 0; i < perconCount; i++){
+                people[i] = (Person) oos.readObject(); // записываем считанные объекты
+            }
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Второй способ
+Записать челеком масив из обьектов
+достаточно записать масив
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person[] people = {new Person (1, "Tom"),
+                new Person(2, "Maks")};
+
+        try {
+            FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(people); // Записываем массив
+
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Person implements Serializable{
+    private int id;
+    private String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toString(){
+        return id + "," + name;
+    }
+}
+
+// Чтение из файла
+class ReadObject{
+    public static void main(String[] args) {
+        try {
+            FileInputStream fip = new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectInputStream oos = new ObjectInputStream(fip);
+
+
+            Person[] people = (Person[]) oos.readObject(); // возвратит тот объект, который был записан в файл
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Сериализация Transient, serialVersionUID{
+Transient - используеся тогда когда не хотим сериализововать какое то поле: private transient String name; // это поле не будет сериализоваться
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person person1 = new Person(1, "Tom");
+
+        try (ObjectInputStream oos = new ObjectInputStream(
+                new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"))){
+            oos.writeObject(person1); // Записываем массив
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class ReadObject{
+    public static void main(String[] args) {
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"))) { // реализовываем автоматическое закрытие потока
+
+            Person[] people = (Person[]) ois.readObject(); // возвратит тот объект, который был записан в файл
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+}
+}
+
+enuma - перечесление{
+ Animal animal = Animal.CAT;
+        Seson sesons = Seson.AUTUMN;
+
+        switch (animal){
+            case CAT:
+                System.out.println("its cat");
+                break;
+        }
+    }
+}
+enum Animal{
+    DOG, CAT, FROG
+}
+enum Seson{
+    WINTR, AUTUMN
+}
+instanceof - проверяет евляется объект объектом этого класа: seson instanceof Seson
+Более продвинутый сценарий использования
+Season season = Season.AUTUMN;
+System.out.println(season.name()); // возвращается имя enumа в виде строки
+ss Main {
+    public static void main(String[] args) {
+        Season season = Season.AUTUMN;
+        Animal animal = Animal.CAT;
+        System.out.println(season.name()); // возвращается имя enumа в виде строки
+
+        Animal cat = Animal.valueOf("CAT"); // Вернет енам
+        System.out.println(cat.getTranslation());
+        Season winet = Season.WINTER;
+        System.out.println(winet.ordinal()); // вернет индекс енам
+    }
+
+}
+enum Animal {
+    DOG("собака"), CAT("кошка"), FROG("лягушка");
+
+    private String translation;
+    Animal() {}
+    Animal(String translation){
+        this.translation = translation;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+    public String toString(){
+        return translation;
+    }
+}
+
+enum Season{
+    WINTER(-30), AUTUMN(10);
+
+    private int teperatura;
+
+    Season(int teperatura){
+        this.teperatura = teperatura;
+    }
+
+    public int getTeperatura() {
+        return teperatura;
+    }
+}
 }
