@@ -700,3 +700,51 @@ class Main{
 }
 
 }
+
+Многопоточность{
+Поток исполнение - это последовательность исполнения программы
+Процесс - это совокупность всех потоков программы и веделенная им общая память
+Локальные переменные принадлежать одному потоку, а статические переменные и данные члены классов видны всем потокам
+Для работы с потоками в java есть библиотека java.util.concerrent
+Проблемы многопоточности
+Методы синхронизации
+Использование volatile переменные - говорит компилятору, что эта переменная должна обслуживаться особенно
+Использование атомарных переменных: AtomiclInteger и тд
+Использование потокобезопасных коллекций из java.util.concerrent
+
+пример
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class Main  {
+    public static void main(String[] args) {
+        Ticker ticker = new Ticker("ticker");
+        Ticker second = new Ticker("Second");
+
+        // запускаем одновременно два тикера
+
+        ExecutorService executorService = Executors.newFixedThreadPool(2); // создаем два потока
+        executorService.submit(ticker); // помещаем то что мы хотим запустить
+        executorService.submit(second); // помещаем то что мы хотим запустить
+        executorService.close();
+    }
+}
+class Ticker implements Runnable{
+    private final String name;
+    public Ticker(String name) {
+        this.name = name;
+    }
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(name + " : " + i);
+            try {
+                Thread.sleep(500); // останавливает поток на указанно кол во милисек
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+}
