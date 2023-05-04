@@ -804,3 +804,103 @@ class Ticker implements Runnable{
 , a для проверки наличия какого то объекта метод contains (Object key).
 
 }
+
+Вложенные классы{
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+class Main{
+    public static void main(String[] args) {
+        Bank.Banker banker = new Bank.Banker();
+        Bank bank = banker.createBank();
+        Bank.Account account = bank.new Account("qwe", "Tom Rib", 10000);
+        account.open();
+        bank.putMoney("qwe", 100);
+        bank.getMoney("qwe", 100);
+
+        account.close();
+    }
+}
+
+class Bank{
+     class Account{
+        private String id;
+        private String name;
+        private int money;
+        private ArrayList<AccountOperation> operations =
+                new ArrayList<>();
+
+        public Account(String id, String name, int amount){
+            this.name = name;
+            this.id = id;
+            this.money = amount;
+        }
+
+        public void open(){
+            accounts.put(id, this);
+        }
+
+        public void close(){
+            accounts.remove(id);
+        }
+
+    }
+
+    public static class Banker{
+        public Bank createBank(){
+            return new Bank();
+        }
+    }
+
+
+    private Bank(){
+
+    }
+    HashMap<String, Account> accounts = new HashMap<>();
+
+    public void putMoney(String id, int amount){
+        Account account = accounts.get(id);
+        if (account == null) {
+            return;
+        }
+        AccountOperation operation = new AccountOperation() {
+            @Override
+            public Date getDate() {
+                return new Date();
+            }
+
+            @Override
+            public int amount() {
+                return amount;
+            }
+        };
+        account.operations.add(operation);
+    }
+    public void getMoney(String id, int amount){
+        Account account = accounts.get(id);
+        if (account == null){
+            return;
+        }
+        AccountOperation operation = new AccountOperation() {
+            @Override
+            public Date getDate() {
+                return new Date();
+            }
+
+            @Override
+            public int amount() {
+                return -amount;
+            }
+        };
+        account.operations.add(operation);
+    }
+}
+
+interface AccountOperation{
+    Date getDate();
+    int amount();
+}
+}
+
+
