@@ -904,3 +904,64 @@ interface AccountOperation{
 }
 
 
+Java Generics - обобщенные {
+Обобщенный алгоритм - он может оперировать разными типами данными без изменения
+своей структуры
+Для того, чтобы сделать класс обобщенным, нужно после его имени вставить конструкциию
+вида <GENERIC_TYPE>, где GENERIC_TYPE будет условным обозначения
+class Main{
+    public static void main(String[] args) {
+        CustomArrayList<String> strings = new CustomArrayList<>();
+
+        for (int i = 0; i <= 100; i++){
+            strings.add("Hello " + i);
+        }
+
+        for (int i = 0; i < strings.getLength(); i++){
+            System.out.println(strings.get(i));
+        }
+        function(42);
+        function("Hellow ");
+    }
+    // Обобщенный метод
+    static <GENERIC_TYPE> void function(GENERIC_TYPE parameter){
+        System.out.println(parameter.toString());
+    }
+}
+
+class CustomArrayList<GENERIC_TYPE> {
+    private Object[] data = new Object[0];
+    private int length = 0;
+
+    // метод добавления
+    public void add(GENERIC_TYPE element){
+        if (length == data.length){
+            Object[] newData  = new Object[data.length * 2 + 1];
+            for (int i = 0; i < data.length; i++){
+                newData[i] = data[i];
+            }
+            data = newData;
+        }
+        data[length] = element;
+        length++;
+    }
+    // получения элемента по индексу
+    public GENERIC_TYPE get(int index){
+        if(index >= length || index < 0){
+            throw new ArrayIndexOutOfBoundsException(index);
+        }
+        return (GENERIC_TYPE) data[index];
+    }
+
+    public int getLength(){
+        return length;
+    }
+
+    public void clear(){
+        data = new Object[0];
+        length = 0;
+    }
+}
+}
+
+
