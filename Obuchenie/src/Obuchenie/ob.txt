@@ -979,7 +979,40 @@ long l = 999999999999999999L;
         BigInteger big = BigInteger.valueOf(l);
         BigInteger res = big.multiply(BigInteger.valueOf(l)); // умножаем на сто
         System.out.println(res);
+}
 
+Список элементов{
+ArrayList<String> todoList = new ArrayList<>(); - строго определенный поряко
+todoList.add("Первоее дело");
+todoList.add(0, "Второе дело");
+for (String list : todoList){ // использовать тогда когда не вожны номера списков
+        System.out.println(list);
+    }
+  ArrayList<String> todoList = new ArrayList<>(){{
+            add("Первое дело");
+            add(1, "Второе дело");
+        }}; // короткая запись
+ todoList.remove(0); - удалили дело
+}
+Набор уникальных элементов{
+        HashSet<String> words = new HashSet<>(){{
+            add("Первое дело");
+            add("Первое дело");
+            add("Второе дело");
+        }};
+
+        for (String wos : words){
+            System.out.println(wos);
+        }
+        System.out.println(words.contains(2));
+contains - выдаст true или false если есть элемент под этим номером, поиск происходит мгновенно
+TreeSet{
+Набор упорядоченных элементов в алфовитном порядке
+ TreeSet<String> treeSet = new TreeSet<>(){{
+            add("Первое дело");
+            add("Первое дело");
+            add("Второе дело");
+        }};
 }
 
 
