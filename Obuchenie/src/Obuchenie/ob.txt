@@ -85,8 +85,13 @@ Stream.iterate(1, n -> n + 1).forEach(System.out::println); - бесконечн
 
 
 Методы{
+статические методы можно вызывать без создания объекта
 void - нечего не возвращает не надо прописывать return
 return - возвращает, и сразу выходит из метода
+прописывать тип метода только в том случае если он возвращает какой то тип данных
+  public int sum(int a, int b){
+        return a + b;
+    }
 Методы с доп партаметром, должно быть указанно какой парамерт он будет устастанавливать{
 String name;
 void setName(String username){
@@ -367,7 +372,44 @@ class Electrocar{
 }
 
 
-Запись в файл{
+Файл{
+Классы для работы с файлми
+Для получения информации о файле используется класс File
+Для чтения из файла используется класс FileInputStream, для записи FileOutputSream
+Проверка файла на существование - exists()
+Проверить является ли файл каталогом - isDirectory() & isFile()
+список файлов директории - list()
+Размер файла - length()
+Проверить возможность чтения/записи - canRead() / canWrite()
+
+Чтения из фала
+Для чтения из файла используется класс - FileInputStream
+Что бы узнать кол-во байт доступно для чтения используется метод available()
+Чтения из файла производится методом read в трех вариантах:
+1. По одному байту
+2. Массивом
+3. Массивом с указанием начальной и конечной позиций
+
+
+Запись в файл
+Для записи используется класс FileOutputStream
+Запись производится методом write так же тремя различными способами как и в чтении файла
+Пример
+File file = new File("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+        FileInputStream fis = new FileInputStream(file);
+        int length = fis.available(); // узнаем размер файла
+
+        byte[] data = new byte[length]; // создаем массив и передаем ему длину length
+        fis.read(data);
+
+        String text = new String(data); // преобразуем файл в строковый объект
+
+        FileOutputStream fos = new FileOutputStream(file, true); // параметр true говорит о том что файл будет дополняться
+        String newText = "!!!!!!File!!!!!!";
+        byte[] newTextByte = newText.getBytes(); // Превращает текст в массив байтов
+        fos.write(newTextByte);
+        fos.close();
+
 Запись строковых данных
 PrintWriter - предназначен только для записи строк
 File file = new File("tets");
@@ -376,8 +418,8 @@ ow.println("Test or 1"); - записываем первую строку
 ow.println("Test or 2"); - записываем вторую строку
 ow.close();
 }
-
 Запись обьектов{
+Первый способ
 Сериализация объектов
 import java.io.*;
 
@@ -447,5 +489,483 @@ class ReadObject{
 }
 
 Сериализация массивов{
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person[] people = {new Person (1, "Tom"),
+                new Person(2, "Maks")};
+
+        try {
+            FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeInt(people.length); // длинна массива
+            for (Person person: people){
+                oos.writeObject(person); // записываем в масив
+            }
+
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Person implements Serializable{
+    private int id;
+    private String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toString(){
+        return id + "," + name;
+    }
+}
+
+// Чтение из файла
+class ReadObject{
+    public static void main(String[] args) {
+        try {
+            FileInputStream fip = new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectInputStream oos = new ObjectInputStream(fip);
+
+            int perconCount = oos.readInt(); // считываем число
+
+            Person[] people = new Person[perconCount];
+            for (int i = 0; i < perconCount; i++){
+                people[i] = (Person) oos.readObject(); // записываем считанные объекты
+            }
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Второй способ
+Записать челеком масив из обьектов
+достаточно записать масив
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person[] people = {new Person (1, "Tom"),
+                new Person(2, "Maks")};
+
+        try {
+            FileOutputStream fos = new FileOutputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(people); // Записываем массив
+
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Person implements Serializable{
+    private int id;
+    private String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String toString(){
+        return id + "," + name;
+    }
+}
+
+// Чтение из файла
+class ReadObject{
+    public static void main(String[] args) {
+        try {
+            FileInputStream fip = new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin");
+            ObjectInputStream oos = new ObjectInputStream(fip);
+
+
+            Person[] people = (Person[]) oos.readObject(); // возвратит тот объект, который был записан в файл
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Сериализация Transient, serialVersionUID{
+Transient - используеся тогда когда не хотим сериализововать какое то поле: private transient String name; // это поле не будет сериализоваться
+public class Main {
+    // Запись в файл
+    public static void main(String[] args){
+        Person person1 = new Person(1, "Tom");
+
+        try (ObjectInputStream oos = new ObjectInputStream(
+                new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"))){
+            oos.writeObject(person1); // Записываем массив
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class ReadObject{
+    public static void main(String[] args) {
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new FileInputStream("/home/dxdyz/GIT/main/Obuchenie/pesronBin.bin"))) { // реализовываем автоматическое закрытие потока
+
+            Person[] people = (Person[]) ois.readObject(); // возвратит тот объект, который был записан в файл
+
+            System.out.println(Arrays.toString(people)); // выводим масив
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+}
+}
+
+enuma - перечесление{
+ Animal animal = Animal.CAT;
+        Seson sesons = Seson.AUTUMN;
+
+        switch (animal){
+            case CAT:
+                System.out.println("its cat");
+                break;
+        }
+    }
+}
+enum Animal{
+    DOG, CAT, FROG
+}
+enum Seson{
+    WINTR, AUTUMN
+}
+instanceof - проверяет евляется объект объектом этого класа: seson instanceof Seson
+Более продвинутый сценарий использования
+Season season = Season.AUTUMN;
+System.out.println(season.name()); // возвращается имя enumа в виде строки
+ss Main {
+    public static void main(String[] args) {
+        Season season = Season.AUTUMN;
+        Animal animal = Animal.CAT;
+        System.out.println(season.name()); // возвращается имя enumа в виде строки
+
+        Animal cat = Animal.valueOf("CAT"); // Вернет енам
+        System.out.println(cat.getTranslation());
+        Season winet = Season.WINTER;
+        System.out.println(winet.ordinal()); // вернет индекс енам
+    }
 
 }
+enum Animal {
+    DOG("собака"), CAT("кошка"), FROG("лягушка");
+
+    private String translation;
+    Animal() {}
+    Animal(String translation){
+        this.translation = translation;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+    public String toString(){
+        return translation;
+    }
+}
+
+enum Season{
+    WINTER(-30), AUTUMN(10);
+
+    private int teperatura;
+
+    Season(int teperatura){
+        this.teperatura = teperatura;
+    }
+
+    public int getTeperatura() {
+        return teperatura;
+    }
+}
+}
+
+Рекурсия - вызов метода в теле этого же метода {
+условие выхода
+class Main{
+    public static void main(String[] args) {
+        counter(3);
+    }
+
+    // counter(3) -> counter(2) -> counter(1)
+    private static void counter(int n){
+        if(n == 0)
+            return;
+        System.out.println(n);
+
+        counter(n - 1); // 3, 2, 1
+    }
+}
+
+}
+
+Многопоточность{
+Поток исполнение - это последовательность исполнения программы
+Процесс - это совокупность всех потоков программы и веделенная им общая память
+Локальные переменные принадлежать одному потоку, а статические переменные и данные члены классов видны всем потокам
+Для работы с потоками в java есть библиотека java.util.concerrent
+Проблемы многопоточности
+Методы синхронизации
+Использование volatile переменные - говорит компилятору, что эта переменная должна обслуживаться особенно
+Использование атомарных переменных: AtomiclInteger и тд
+Использование потокобезопасных коллекций из java.util.concerrent
+
+пример
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class Main  {
+    public static void main(String[] args) {
+        Ticker ticker = new Ticker("ticker");
+        Ticker second = new Ticker("Second");
+
+        // запускаем одновременно два тикера
+
+        ExecutorService executorService = Executors.newFixedThreadPool(2); // создаем два потока
+        executorService.submit(ticker); // помещаем то что мы хотим запустить
+        executorService.submit(second); // помещаем то что мы хотим запустить
+        executorService.close();
+    }
+}
+class Ticker implements Runnable{
+    private final String name;
+    public Ticker(String name) {
+        this.name = name;
+    }
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(name + " : " + i);
+            try {
+                Thread.sleep(500); // останавливает поток на указанно кол во милисек
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+}
+
+Коллекции - это структурированные хранилища однотипных объектов {
+Коллекции не могут использоваться для примитивных типов
+У примитивных типов есть обертки: Integer, Double
+
+Список - позволяет хранить произвольный набор объектов
+
+Множество - хранит только уникальные значения, в множестве невозможно хранить несколько одинаковых елементов
+Сортированное множество - TreeSet
+Не сортированное - HashSet
+Объеденение множетсв - addAll()
+Пересечение множетв - retainAll()
+Разность множетв - removeAll()
+
+Карты и ассоциативные массивы - это хранилище объектов, в котором вметво порядкогово номера можно использовать другие обьекты
+Ключ это объек который используется вмето порядкового номера
+Получить сохраненный объект по ключу можно методом get(Object key), положить объект можно с помощью метода put(Object key, Object o), для удаления используется метод remove(Object key)
+, a для проверки наличия какого то объекта метод contains (Object key).
+
+}
+
+Вложенные классы{
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+class Main{
+    public static void main(String[] args) {
+        Bank.Banker banker = new Bank.Banker();
+        Bank bank = banker.createBank();
+        Bank.Account account = bank.new Account("qwe", "Tom Rib", 10000);
+        account.open();
+        bank.putMoney("qwe", 100);
+        bank.getMoney("qwe", 100);
+
+        account.close();
+    }
+}
+
+class Bank{
+     class Account{
+        private String id;
+        private String name;
+        private int money;
+        private ArrayList<AccountOperation> operations =
+                new ArrayList<>();
+
+        public Account(String id, String name, int amount){
+            this.name = name;
+            this.id = id;
+            this.money = amount;
+        }
+
+        public void open(){
+            accounts.put(id, this);
+        }
+
+        public void close(){
+            accounts.remove(id);
+        }
+
+    }
+
+    public static class Banker{
+        public Bank createBank(){
+            return new Bank();
+        }
+    }
+
+
+    private Bank(){
+
+    }
+    HashMap<String, Account> accounts = new HashMap<>();
+
+    public void putMoney(String id, int amount){
+        Account account = accounts.get(id);
+        if (account == null) {
+            return;
+        }
+        AccountOperation operation = new AccountOperation() {
+            @Override
+            public Date getDate() {
+                return new Date();
+            }
+
+            @Override
+            public int amount() {
+                return amount;
+            }
+        };
+        account.operations.add(operation);
+    }
+    public void getMoney(String id, int amount){
+        Account account = accounts.get(id);
+        if (account == null){
+            return;
+        }
+        AccountOperation operation = new AccountOperation() {
+            @Override
+            public Date getDate() {
+                return new Date();
+            }
+
+            @Override
+            public int amount() {
+                return -amount;
+            }
+        };
+        account.operations.add(operation);
+    }
+}
+
+interface AccountOperation{
+    Date getDate();
+    int amount();
+}
+}
+
+
+Java Generics - обобщенные {
+Обобщенный алгоритм - он может оперировать разными типами данными без изменения
+своей структуры
+Для того, чтобы сделать класс обобщенным, нужно после его имени вставить конструкциию
+вида <GENERIC_TYPE>, где GENERIC_TYPE будет условным обозначения
+class Main{
+    public static void main(String[] args) {
+        CustomArrayList<String> strings = new CustomArrayList<>();
+
+        for (int i = 0; i <= 100; i++){
+            strings.add("Hello " + i);
+        }
+
+        for (int i = 0; i < strings.getLength(); i++){
+            System.out.println(strings.get(i));
+        }
+        function(42);
+        function("Hellow ");
+    }
+    // Обобщенный метод
+    static <GENERIC_TYPE> void function(GENERIC_TYPE parameter){
+        System.out.println(parameter.toString());
+    }
+}
+
+class CustomArrayList<GENERIC_TYPE> {
+    private Object[] data = new Object[0];
+    private int length = 0;
+
+    // метод добавления
+    public void add(GENERIC_TYPE element){
+        if (length == data.length){
+            Object[] newData  = new Object[data.length * 2 + 1];
+            for (int i = 0; i < data.length; i++){
+                newData[i] = data[i];
+            }
+            data = newData;
+        }
+        data[length] = element;
+        length++;
+    }
+    // получения элемента по индексу
+    public GENERIC_TYPE get(int index){
+        if(index >= length || index < 0){
+            throw new ArrayIndexOutOfBoundsException(index);
+        }
+        return (GENERIC_TYPE) data[index];
+    }
+
+    public int getLength(){
+        return length;
+    }
+
+    public void clear(){
+        data = new Object[0];
+        length = 0;
+    }
+}
+}
+
+
