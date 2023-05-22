@@ -89,6 +89,7 @@ Stream.iterate(1, n -> n + 1).forEach(System.out::println); - бесконечн
 void - нечего не возвращает не надо прописывать return
 return - возвращает, и сразу выходит из метода
 прописывать тип метода только в том случае если он возвращает какой то тип данных
+прописывать void если метод нечего не возврщает
   public int sum(int a, int b){
         return a + b;
     }
@@ -966,6 +967,52 @@ class CustomArrayList<GENERIC_TYPE> {
         length = 0;
     }
 }
+}
+BigDecimal - позволяет работать с повышенной точностью с числами{
+BigDecimal a = BigDecimal.valueOf(0.2);
+        BigDecimal b = BigDecimal.valueOf(0.1);
+        BigDecimal result = a.subtract(b);
+        System.out.println(result);
+
+BigInteger -  позволяет рабоать с большими числами
+long l = 999999999999999999L;
+        BigInteger big = BigInteger.valueOf(l);
+        BigInteger res = big.multiply(BigInteger.valueOf(l)); // умножаем на сто
+        System.out.println(res);
+}
+
+Список элементов{
+ArrayList<String> todoList = new ArrayList<>(); - строго определенный поряко
+todoList.add("Первоее дело");
+todoList.add(0, "Второе дело");
+for (String list : todoList){ // использовать тогда когда не вожны номера списков
+        System.out.println(list);
+    }
+  ArrayList<String> todoList = new ArrayList<>(){{
+            add("Первое дело");
+            add(1, "Второе дело");
+        }}; // короткая запись
+ todoList.remove(0); - удалили дело
+}
+Набор уникальных элементов{
+        HashSet<String> words = new HashSet<>(){{
+            add("Первое дело");
+            add("Первое дело");
+            add("Второе дело");
+        }};
+
+        for (String wos : words){
+            System.out.println(wos);
+        }
+        System.out.println(words.contains(2));
+contains - выдаст true или false если есть элемент под этим номером, поиск происходит мгновенно
+TreeSet{
+Набор упорядоченных элементов в алфовитном порядке
+ TreeSet<String> treeSet = new TreeSet<>(){{
+            add("Первое дело");
+            add("Первое дело");
+            add("Второе дело");
+        }};
 }
 
 
