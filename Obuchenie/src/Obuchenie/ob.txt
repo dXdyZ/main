@@ -1014,5 +1014,35 @@ TreeSet{
             add("Второе дело");
         }};
 }
+HashMap и TreeMap{
+добавляется с помощью метода put
+get - на вход получает ключ выдает значение
+remove - удалит определенный ключ
+
+Hash
+HashMap<String, Integer> map = new HashMap<>();
+
+        Scanner sc = new Scanner(System.in);
+        for (; ; ) {
+            String goodMap = sc.nextLine();
+            if (goodMap.equals("LIST")) { // выводит все
+                pintMap(map);
+                continue;
+            }
+            int count = 1;
+            if (map.containsKey(goodMap)) { // если содержит ключ с именем этого товара
+                count = map.get(goodMap) + 1; // берем значение и пребовляем еденицу
+            }
+            map.put(goodMap, count); // если нету такого товара то добовляем его прибавив еденицу
+        }
+    }
+
+    private static void pintMap(Map<String, Integer> map){
+        for (String key : map.keySet()){ // получаем set его ключей
+            System.out.println(key + " => " + map.get(key));
+        }
+    }
+
+}
 
 
