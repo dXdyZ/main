@@ -13,8 +13,7 @@ public class DatabaseHandler extends configs{
         return dbConnection;
     }
 
-    public void singUpUser(String firstname, String lastname, String username,
-                           String password, String location, String gender){
+    public void singUpUser(User user){
         // записываем в базу
         String insert = "INSERT INTO " + Const.USER_TABLE + "(" +
                 Const.USER_FIRSTNAME + "," + Const.USER_LASTNAME +
@@ -23,16 +22,37 @@ public class DatabaseHandler extends configs{
                 "VALUES(?,?,?,?,?,?)";
         try {
             PreparedStatement prSt = getDbConnection().prepareStatement(insert);
-            prSt.setString(1, firstname);
-            prSt.setString(2, lastname);
-            prSt.setString(3, username);
-            prSt.setString(4, password);
-            prSt.setString(5, location);
-            prSt.setString(6, gender);
-            prSt.executeUpdate();
+            prSt.setString(1, user.getFirstName());
+            prSt.setString(2, user.getLastName());
+            prSt.setString(3, user.getUserName());
+            prSt.setString(4, user.getPassword());
+            prSt.setString(5, user.getLocation());
+            prSt.setString(6, user.getGender());
+            prSt.executeUpdate(); // добовляем данные в базу
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
+    }
+    // получаем данный из базы ResultSet - это массив из все полей
+    // делаем авторизацию
+    // =? - что либо
+    public ResultSet getUser(User user){
+        ResultSet resSet = null;
+
+        String select = "SELECT * FROM " + Const.USER_TABLE + " WHERE "
+                + Const.USER_USERNAME + "=? AND " + Const.USER_PASSWORD + "=?";
+
+        try {
+            PreparedStatement prSt = getDbConnection().prepareStatement(select);
+            prSt.setString(1, user.getUserName());
+            prSt.setString(2, user.getPassword());
+
+            resSet = prSt.executeQuery(); // получаем данный из базы
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return resSet;
     }
 }
