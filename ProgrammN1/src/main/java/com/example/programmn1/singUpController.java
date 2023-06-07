@@ -44,10 +44,29 @@ public class singUpController {
     void initialize() {
         DatabaseHandler dbHandler = new DatabaseHandler();
         singUpButton.setOnAction(actionEvent -> {
-            dbHandler.singUpUser(singUpName.getText(), singUpLastName.getText(),
-                    loginText.getText(), passText.getText(), singUpCountry.getText(),
-                    "Male");
+            singUpNewUser();
         });
+    }
+
+    private void singUpNewUser() {
+        DatabaseHandler dbHandler = new DatabaseHandler();
+
+            String firstName = singUpName.getText();
+            String lastName = singUpLastName.getText();
+            String userName = loginText.getText();
+            String password = passText.getText();
+            String location = singUpCountry.getText();
+            String gender = "";
+
+            if (singUpMen.isSelected()) // если он выбран
+                gender = "Мужской";
+            else
+                gender = "Женский";
+
+            User user = new User(firstName, lastName, userName, password,
+                    location, gender);
+
+            dbHandler.singUpUser(user);
     }
 
 }

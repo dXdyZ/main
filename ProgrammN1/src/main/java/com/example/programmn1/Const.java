@@ -1,7 +1,7 @@
 package com.example.programmn1;
 
 public class Const {
-    public static final String USER_TABLE = "users";
+    public static final String USER_TABLE = "user";
     public static final String USER_ID = "iduser";
     public static final String USER_FIRSTNAME = "firstname";
     public static final String USER_LASTNAME = "lastname";
